@@ -35,13 +35,15 @@ public static class PerlinNoiseGenerator
         public int NoiseScale;
 
         public bool UseSmootherStep;
+        public bool Inverse;
 
-        public PerlinNoiseLayer(float layerWeigth, int gradientOffset, int scale, bool useSmootherStep)
+        public PerlinNoiseLayer(float layerWeigth, int gradientOffset, int scale, bool useSmootherStep, bool inverse)
         {
             LayerWeigth = layerWeigth;
             GradientOffset = gradientOffset;
             NoiseScale = scale;
             UseSmootherStep = useSmootherStep;
+            Inverse = inverse;
         }
     }
 
@@ -91,9 +93,13 @@ public static class PerlinNoiseGenerator
 
             layerValue = layerValue / 2 + 0.5f;
 
+            if (currentLayer.Inverse)
+            {
+                layerValue = 1.0f - layerValue;
+            }
+
             value += layerValue * currentLayer.LayerWeigth * parameters.LayerWeightMultiplier;
         }
-
         result[ix, iy] = value;
     }
 
@@ -101,12 +107,6 @@ public static class PerlinNoiseGenerator
     {
         w = Mathf.Clamp(w, 0.0f, 1.0f);
         return w * w * (3.0f - 2.0f * w);
-    }
-
-    public static float Smootherstep(float w)
-    {
-        w = Mathf.Clamp(w, 0.0f, 1.0f);
-        return ((w * (w * 6.0f - 15.0f) + 10.0f) * w * w * w);
     }
 
     public static float Interpolate(float a0, float a1, float w, bool smootherStep)

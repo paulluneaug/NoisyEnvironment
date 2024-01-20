@@ -2,40 +2,37 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityUtility.CustomAttributes;
+using static NoiseLayer;
 
 public class NoiseTerrainController : MonoBehaviour
 {
-    [Serializable]
-    private struct NoiseLayer
-    {
-        public bool Enabled;
+    //[Serializable]
+    //private struct NoiseLayer
+    //{
+    //    public bool Enabled;
 
-        public int NoiseScale;
-        public bool UseSmootherStep;
-        public int GradientOffset;
-        public float LayerWeight;
+    //    public int NoiseScale;
+    //    public bool UseSmootherStep;
+    //    public int GradientOffset;
+    //    public float LayerWeight;
 
-        public PerlinNoiseGenerator.PerlinNoiseLayer ToPerlinNoiseLayer()
-        {
-            return new PerlinNoiseGenerator.PerlinNoiseLayer(LayerWeight, GradientOffset, NoiseScale, UseSmootherStep);
-        }
-        public VornoiNoiseGenerator.VornoiNoiseLayer ToVornoiNoiseLayer()
-        {
-            return new VornoiNoiseGenerator.VornoiNoiseLayer(LayerWeight, GradientOffset, NoiseScale, UseSmootherStep);
-        }
-    }
+    //    public PerlinNoiseGenerator.PerlinNoiseLayer ToPerlinNoiseLayer()
+    //    {
+    //        return new PerlinNoiseGenerator.PerlinNoiseLayer(LayerWeight, GradientOffset, NoiseScale, UseSmootherStep);
+    //    }
+    //    public VornoiNoiseGenerator.VornoiNoiseLayer ToVornoiNoiseLayer()
+    //    {
+    //        return new VornoiNoiseGenerator.VornoiNoiseLayer(LayerWeight, GradientOffset, NoiseScale, UseSmootherStep);
+    //    }
+    //}
 
-    private enum NoiseType
-    {
-        Perlin,
-        Vornoi,
-    }
-
+    [Button(nameof(UpdateTerrainProperties), "Update Terrain Properties")]
     [SerializeField] private Renderer m_renderer = null;
 
     [SerializeField] private NoiseType m_noiseType = NoiseType.Perlin;
 
-    [SerializeField] private NoiseLayer[] m_noiseLayers = null;
+    [SerializeField] private NoiseLayer m_noiseLayer = null;
 
     [SerializeField] private Terrain m_terrain;
     [SerializeField] private int m_terrainHeight;
@@ -55,17 +52,19 @@ public class NoiseTerrainController : MonoBehaviour
 
         m_recorder = new ScriptExecutionTimeRecorder();
 
+
+        UpdateTerrainProperties();
+    }
+
+    public void UpdateTerrainProperties()
+    {
+        m_recorder ??= new ScriptExecutionTimeRecorder();
+        m_recorder.Reset();
+
         int resolution = m_terrain.terrainData.heightmapResolution;
         m_textureSize = new Vector2Int(resolution - 1, resolution - 1);
 
-        UpdateShaderProperty();
-    }
-
-    public void UpdateShaderProperty()
-    {
-        m_recorder.Reset();
-
-        float[,] terrainDatas = GetHeightMap();
+        float[,] terrainDatas = GetHeightMap(m_textureSize);
 
         m_recorder.AddEvent("Noise Generation");
 
@@ -80,18 +79,8 @@ public class NoiseTerrainController : MonoBehaviour
         m_recorder.LogAllEventsTimeSpan();
     }
 
-    private float[,] GetHeightMap()
+    private float[,] GetHeightMap(Vector2Int zone)
     {
-        switch (m_noiseType)
-        {
-            case NoiseType.Perlin:
-                PerlinNoiseGenerator.PerlinNoiseGenerationParameters perlinParameter = new(m_textureSize, m_noiseLayers.Where(l => l.Enabled).Select(l => l.ToPerlinNoiseLayer()).ToArray());
-                return PerlinNoiseGenerator.GenerateZone(perlinParameter);
-
-            case NoiseType.Vornoi:
-                VornoiNoiseGenerator.VornoiNoiseGenerationParameters vornoiParameters = new(m_textureSize, m_noiseLayers.Where(l => l.Enabled).Select(l => l.ToVornoiNoiseLayer()).ToArray());
-                return VornoiNoiseGenerator.GenerateZone(vornoiParameters);
-        }
-        return null;
+        return m_noiseLayer.Generate(zone);
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Diagnostics;
 using static NoiseUtils;
 
-public class VornoiNoiseGenerator : MonoBehaviour
+public static class VornoiNoiseGenerator
 {
     public class VornoiNoiseGenerationParameters
     {
@@ -34,13 +34,15 @@ public class VornoiNoiseGenerator : MonoBehaviour
         public int NoiseScale;
 
         public bool UseSmootherStep;
+        public bool Inverse;
 
-        public VornoiNoiseLayer(float layerWeigth, int gradientOffset, int scale, bool useSmootherStep)
+        public VornoiNoiseLayer(float layerWeigth, int gradientOffset, int scale, bool useSmootherStep, bool inverse)
         {
             LayerWeigth = layerWeigth;
             GradientOffset = gradientOffset;
             NoiseScale = scale;
             UseSmootherStep = useSmootherStep;
+            Inverse = inverse;
         }
     }
 
@@ -88,6 +90,11 @@ public class VornoiNoiseGenerator : MonoBehaviour
             float layerValue = minSqrDist;// Mathf.Sqrt(minSqrDist);
 
             layerValue = layerValue / 2 + 0.5f;
+
+            if (currentLayer.Inverse)
+            {
+                layerValue = 1.0f - layerValue;
+            }
 
             value += layerValue * currentLayer.LayerWeigth * parameters.LayerWeightMultiplier;
         }

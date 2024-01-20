@@ -10,7 +10,7 @@ public static class NoiseUtils
         int s = w / 2;
         uint a = (uint)ix;
         uint b = (uint)iy;
-        a *= 1284157443 * ((uint)seed + 83285486);
+        a *= 1284157443 + ((uint)seed * 821521017);
         b ^= a << s | a >> w - s;
         b *= 1911520717;
         a ^= b << s | b >> w - s;
@@ -35,5 +35,11 @@ public static class NoiseUtils
         seed = Hash(seed);
         float random = seed / 4294967295.0f; // 2^32-1 
         return random * 2 - 1; // [-1;1]
+    }
+
+    public static float Smootherstep(float w)
+    {
+        w = Mathf.Clamp(w, 0.0f, 1.0f);
+        return ((w * (w * 6.0f - 15.0f) + 10.0f) * w * w * w);
     }
 }
