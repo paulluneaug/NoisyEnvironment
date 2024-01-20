@@ -12,33 +12,25 @@ public static class VornoiNoiseGenerator
     public class VornoiNoiseGenerationParameters
     {
         public Vector2Int ZoneToGenerate;
-        public VornoiNoiseLayer[] Layers;
+        public VornoiNoiseLayer Layer;
 
-        public int LayerCount;
-        public float LayerWeightMultiplier;
-
-        public VornoiNoiseGenerationParameters(Vector2Int zoneToGenerate, VornoiNoiseLayer[] layers)
+        public VornoiNoiseGenerationParameters(Vector2Int zoneToGenerate, VornoiNoiseLayer layer)
         {
             ZoneToGenerate = zoneToGenerate;
-            Layers = layers;
-            LayerCount = layers.Length;
-            LayerWeightMultiplier = 1.0f / layers.Sum(l => l.LayerWeigth);
+            Layer = layer;
         }
     }
 
     public struct VornoiNoiseLayer
     {
-        public float LayerWeigth;
-
         public int GradientOffset;
         public int NoiseScale;
 
         public bool UseSmootherStep;
         public bool Inverse;
 
-        public VornoiNoiseLayer(float layerWeigth, int gradientOffset, int scale, bool useSmootherStep, bool inverse)
+        public VornoiNoiseLayer(int gradientOffset, int scale, bool useSmootherStep, bool inverse)
         {
-            LayerWeigth = layerWeigth;
             GradientOffset = gradientOffset;
             NoiseScale = scale;
             UseSmootherStep = useSmootherStep;
@@ -58,48 +50,39 @@ public static class VornoiNoiseGenerator
 
     public static void GetNoiseValue(int index, int xSize, VornoiNoiseGenerationParameters parameters, ref float[,] result)
     {
-        float value = 0;
-
         int ix = index % xSize;
         int iy = index / xSize;
 
-        for (int i = 0; i < parameters.LayerCount; i++)
+        float x = (float)ix / parameters.Layer.NoiseScale;
+        float y = (float)iy / parameters.Layer.NoiseScale;
+
+        float2 position = new float2(x, y);
+
+        // Determine grid cell coordinates
+        int x0 = Mathf.FloorToInt(x);
+        int y0 = Mathf.FloorToInt(y);
+
+        float minSqrDist = 2.0f;
+
+        for(int jx = -1;  jx <= 1; ++jx) 
         {
-            VornoiNoiseLayer currentLayer = parameters.Layers[i];
-
-            float x = (float)ix / currentLayer.NoiseScale;
-            float y = (float)iy / currentLayer.NoiseScale;
-
-            float2 position = new float2(x, y);
-
-            // Determine grid cell coordinates
-            int x0 = Mathf.FloorToInt(x);
-            int y0 = Mathf.FloorToInt(y);
-
-            float minSqrDist = 2.0f;
-
-            for(int jx = -1;  jx <= 1; ++jx) 
+            for (int jy = -1; jy <= 1; ++jy)
             {
-                for (int jy = -1; jy <= 1; ++jy)
-                {
-                    minSqrDist = Mathf.Min(minSqrDist, SqrMagnitude(GetCellPointCoordinates(x0 + jx, y0 + jy, currentLayer.GradientOffset) - position));
-                }
+                minSqrDist = Mathf.Min(minSqrDist, SqrMagnitude(GetCellPointCoordinates(x0 + jx, y0 + jy, parameters.Layer.GradientOffset) - position));
             }
-
-
-            float layerValue = minSqrDist;// Mathf.Sqrt(minSqrDist);
-
-            layerValue = layerValue / 2 + 0.5f;
-
-            if (currentLayer.Inverse)
-            {
-                layerValue = 1.0f - layerValue;
-            }
-
-            value += layerValue * currentLayer.LayerWeigth * parameters.LayerWeightMultiplier;
         }
 
-        result[ix, iy] = value;
+
+        float layerValue = minSqrDist;// Mathf.Sqrt(minSqrDist);
+
+        layerValue = layerValue / 2 + 0.5f;
+
+        if (parameters.Layer.Inverse)
+        {
+            layerValue = 1.0f - layerValue;
+        }
+
+        result[ix, iy] = layerValue;
     }
 
     private static float SqrMagnitude(float2 v)

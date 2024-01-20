@@ -20,7 +20,6 @@ public class NoiseLayer : NoiseLayerBase
     [SerializeField] private int m_noiseScale;
     [SerializeField] private bool m_useSmootherStep;
     [SerializeField] private int m_gradientOffset;
-    [SerializeField] private float m_layerWeight;
     [SerializeField] private bool m_inverse;
 
     [Header("Mask")]
@@ -49,10 +48,6 @@ public class NoiseLayer : NoiseLayerBase
         {
             GenerateZone(zoneToGenerate);
         }
-        else if (WeightChanged())
-        {
-            RecalculateWeigth();
-        }
         else if (InverseChanged())
         {
             RecalculateInverse();
@@ -62,7 +57,7 @@ public class NoiseLayer : NoiseLayerBase
 
     public override bool Changed(Vector2Int zoneToGenerate)
     {
-        return NeedsFullRegeneration(zoneToGenerate) || WeightChanged() || InverseChanged();
+        return NeedsFullRegeneration(zoneToGenerate) || InverseChanged();
     }
 
     private bool NeedsFullRegeneration(Vector2Int zoneToGenerate)
@@ -88,16 +83,14 @@ public class NoiseLayer : NoiseLayerBase
         switch (m_noiseType)
         {
             case NoiseType.Perlin:
-                PerlinNoiseLayer[] perlinLayers = new PerlinNoiseLayer[1];
-                perlinLayers[0] = new PerlinNoiseLayer(m_layerWeight, m_gradientOffset, m_noiseScale, m_useSmootherStep, m_inverse);
-                PerlinNoiseGenerationParameters perlinParameter = new(zoneToGenerate, perlinLayers);
+                PerlinNoiseLayer perlinLayer = new PerlinNoiseLayer(m_gradientOffset, m_noiseScale, m_useSmootherStep, m_inverse);
+                PerlinNoiseGenerationParameters perlinParameter = new(zoneToGenerate, perlinLayer);
                 m_generatedValues = PerlinNoiseGenerator.GenerateZone(perlinParameter);
                 break;
 
             case NoiseType.Vornoi:
-                VornoiNoiseLayer[] vornoiLayers = new VornoiNoiseLayer[1];
-                vornoiLayers[0] = new VornoiNoiseLayer(m_layerWeight, m_gradientOffset, m_noiseScale, m_useSmootherStep, m_inverse);
-                VornoiNoiseGenerationParameters vornoiParameters = new(zoneToGenerate, vornoiLayers);
+                VornoiNoiseLayer vornoiLayer = new VornoiNoiseLayer(m_gradientOffset, m_noiseScale, m_useSmootherStep, m_inverse);
+                VornoiNoiseGenerationParameters vornoiParameters = new(zoneToGenerate, vornoiLayer);
                 m_generatedValues = VornoiNoiseGenerator.GenerateZone(vornoiParameters);
                 break;
         }
@@ -114,26 +107,11 @@ public class NoiseLayer : NoiseLayerBase
         m_savedNoiseScale = m_noiseScale;
         m_savedUseSmootherStep = m_useSmootherStep;
         m_savedGradientOffset = m_gradientOffset;
-        m_savedLayerWeight = m_layerWeight;
         m_savedInverse = m_inverse;
         m_savedRemapInterval = m_remapInterval;
 
         m_savedMask = m_mask;
         m_savedInverseMask = m_inverseMask;
-    }
-
-    private bool WeightChanged()
-    {
-        return m_savedLayerWeight != m_layerWeight;
-    }
-
-    private void RecalculateWeigth()
-    {
-        for (int y = 0; y < m_savedZoneToGenerate.y; y++)
-        {
-            Parallel.For(0, m_savedZoneToGenerate.x, (x) => m_generatedValues[x, y] *= m_layerWeight / m_savedLayerWeight);
-        }
-        m_savedLayerWeight = m_layerWeight;
     }
 
     private bool InverseChanged()

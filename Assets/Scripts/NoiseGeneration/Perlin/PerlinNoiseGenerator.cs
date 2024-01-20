@@ -13,33 +13,25 @@ public static class PerlinNoiseGenerator
     public class PerlinNoiseGenerationParameters
     {
         public Vector2Int ZoneToGenerate;
-        public PerlinNoiseLayer[] Layers;
+        public PerlinNoiseLayer Layer;
 
-        public int LayerCount;
-        public float LayerWeightMultiplier;
-
-        public PerlinNoiseGenerationParameters(Vector2Int zoneToGenerate, PerlinNoiseLayer[] layers)
+        public PerlinNoiseGenerationParameters(Vector2Int zoneToGenerate, PerlinNoiseLayer layer)
         {
             ZoneToGenerate = zoneToGenerate;
-            Layers = layers;
-            LayerCount = layers.Length;
-            LayerWeightMultiplier = 1.0f / layers.Sum(l => l.LayerWeigth);
+            Layer = layer;
         }
     }
 
     public struct PerlinNoiseLayer
     {
-        public float LayerWeigth;
-
         public int GradientOffset;
         public int NoiseScale;
 
         public bool UseSmootherStep;
         public bool Inverse;
 
-        public PerlinNoiseLayer(float layerWeigth, int gradientOffset, int scale, bool useSmootherStep, bool inverse)
+        public PerlinNoiseLayer(int gradientOffset, int scale, bool useSmootherStep, bool inverse)
         {
-            LayerWeigth = layerWeigth;
             GradientOffset = gradientOffset;
             NoiseScale = scale;
             UseSmootherStep = useSmootherStep;
@@ -59,48 +51,42 @@ public static class PerlinNoiseGenerator
 
     public static void GetNoiseValue(int index, int xSize, PerlinNoiseGenerationParameters parameters, ref float[,] result)
     {
-        float value = 0;
-
         int ix = index % xSize;
         int iy = index / xSize;
 
-        for (int i = 0; i < parameters.LayerCount; i++)
+        float x = (float)ix / parameters.Layer.NoiseScale;
+        float y = (float)iy / parameters.Layer.NoiseScale;
+
+        // Determine grid cell coordinates
+        int x0 = Mathf.FloorToInt(x);
+        int y0 = Mathf.FloorToInt(y);
+        int x1 = x0 + 1;
+        int y1 = y0 + 1;
+
+        // Determine interpolation weights
+        // Could also use higher order polynomial/s-curve here
+        float sx = x - x0;
+        float sy = y - y0;
+
+        // Interpolate between grid point gradients
+        int gradientOffset = parameters.Layer.GradientOffset;
+        bool useSmootherStep = parameters.Layer.UseSmootherStep;
+
+        float n0 = DotGridGradient2D(x0, y0, x, y, gradientOffset);
+        float n1 = DotGridGradient2D(x1, y0, x, y, gradientOffset);
+        float ix0 = Interpolate(n0, n1, sx, useSmootherStep);
+        n0 = DotGridGradient2D(x0, y1, x, y, gradientOffset);
+        n1 = DotGridGradient2D(x1, y1, x, y, gradientOffset);
+        float ix1 = Interpolate(n0, n1, sx, useSmootherStep);
+        float layerValue = Interpolate(ix0, ix1, sy, useSmootherStep);
+
+        layerValue = layerValue / 2 + 0.5f;
+
+        if (parameters.Layer.Inverse)
         {
-            PerlinNoiseLayer currentLayer = parameters.Layers[i];
-
-            float x = (float)ix / currentLayer.NoiseScale;
-            float y = (float)iy / currentLayer.NoiseScale;
-
-            // Determine grid cell coordinates
-            int x0 = Mathf.FloorToInt(x);
-            int y0 = Mathf.FloorToInt(y);
-            int x1 = x0 + 1;
-            int y1 = y0 + 1;
-
-            // Determine interpolation weights
-            // Could also use higher order polynomial/s-curve here
-            float sx = x - x0;
-            float sy = y - y0;
-
-            // Interpolate between grid point gradients
-            float n0 = DotGridGradient2D(x0, y0, x, y, currentLayer.GradientOffset);
-            float n1 = DotGridGradient2D(x1, y0, x, y, currentLayer.GradientOffset);
-            float ix0 = Interpolate(n0, n1, sx, currentLayer.UseSmootherStep);
-            n0 = DotGridGradient2D(x0, y1, x, y, currentLayer.GradientOffset);
-            n1 = DotGridGradient2D(x1, y1, x, y, currentLayer.GradientOffset);
-            float ix1 = Interpolate(n0, n1, sx, currentLayer.UseSmootherStep);
-            float layerValue = Interpolate(ix0, ix1, sy, currentLayer.UseSmootherStep);
-
-            layerValue = layerValue / 2 + 0.5f;
-
-            if (currentLayer.Inverse)
-            {
-                layerValue = 1.0f - layerValue;
-            }
-
-            value += layerValue * currentLayer.LayerWeigth * parameters.LayerWeightMultiplier;
+            layerValue = 1.0f - layerValue;
         }
-        result[ix, iy] = value;
+        result[ix, iy] = layerValue;
     }
 
     public static float Smoothstep(float w)

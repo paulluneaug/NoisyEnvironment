@@ -7,32 +7,12 @@ using static NoiseLayer;
 
 public class NoiseTerrainController : MonoBehaviour
 {
-    //[Serializable]
-    //private struct NoiseLayer
-    //{
-    //    public bool Enabled;
-
-    //    public int NoiseScale;
-    //    public bool UseSmootherStep;
-    //    public int GradientOffset;
-    //    public float LayerWeight;
-
-    //    public PerlinNoiseGenerator.PerlinNoiseLayer ToPerlinNoiseLayer()
-    //    {
-    //        return new PerlinNoiseGenerator.PerlinNoiseLayer(LayerWeight, GradientOffset, NoiseScale, UseSmootherStep);
-    //    }
-    //    public VornoiNoiseGenerator.VornoiNoiseLayer ToVornoiNoiseLayer()
-    //    {
-    //        return new VornoiNoiseGenerator.VornoiNoiseLayer(LayerWeight, GradientOffset, NoiseScale, UseSmootherStep);
-    //    }
-    //}
-
     [Button(nameof(UpdateTerrainProperties), "Update Terrain Properties")]
     [SerializeField] private Renderer m_renderer = null;
 
     [SerializeField] private NoiseType m_noiseType = NoiseType.Perlin;
 
-    [SerializeField] private NoiseLayerBase m_noiseLayer = null;
+    [SerializeField] private NoiseLayerBase m_terrainNoiseLayer = null;
 
     [SerializeField] private Terrain m_terrain;
     [SerializeField] private int m_terrainHeight;
@@ -81,6 +61,6 @@ public class NoiseTerrainController : MonoBehaviour
 
     private float[,] GetHeightMap(Vector2Int zone)
     {
-        return m_noiseLayer.GetHeightMap(zone);
+        return m_terrainNoiseLayer.GetHeightMap(zone);
     }
 }
