@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 477157017}
   - component: {fileID: 477157018}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: NoiseController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 888076109}
+  - {fileID: 886371168}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &477157018
@@ -169,32 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_renderer: {fileID: 886371166}
   m_noiseType: 1
-  m_noiseLayers:
-  - Enabled: 0
-    NoiseScale: 2048
-    UseSmootherStep: 0
-    GradientOffset: 0
-    LayerWeight: 2
-  - Enabled: 1
-    NoiseScale: 512
-    UseSmootherStep: 0
-    GradientOffset: 0
-    LayerWeight: 1
-  - Enabled: 0
-    NoiseScale: 256
-    UseSmootherStep: 0
-    GradientOffset: 0
-    LayerWeight: 0.5
-  - Enabled: 0
-    NoiseScale: 128
-    UseSmootherStep: 0
-    GradientOffset: 0
-    LayerWeight: 0.3
-  - Enabled: 0
-    NoiseScale: 64
-    UseSmootherStep: 0
-    GradientOffset: 0
-    LayerWeight: 0.15
+  m_noiseLayer: {fileID: 11400000, guid: 93a24605e1caaa4439817ff3c5906ffd, type: 2}
   m_terrain: {fileID: 888076108}
   m_terrainHeight: 0
   m_terrainMaterial: {fileID: 2100000, guid: 885ec2b65c36a29418eb63b27fdbd099, type: 2}
@@ -415,12 +392,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886371164}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 477157017}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &888076106
 GameObject:
@@ -507,12 +484,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888076106}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 477157017}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901219280
 GameObject:
@@ -613,5 +590,3 @@ SceneRoots:
   - {fileID: 901219283}
   - {fileID: 611768504}
   - {fileID: 477157017}
-  - {fileID: 888076109}
-  - {fileID: 886371168}
