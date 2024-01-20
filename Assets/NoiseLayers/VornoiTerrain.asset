@@ -20,4 +20,4 @@ MonoBehaviour:
   m_inverse: 0
   m_mask: {fileID: 11400000, guid: 8b63dd368aab5d84fba16497dee9e05f, type: 2}
   m_inverseMask: 0
-  m_remapInterval: {x: 0.35, y: 0.6}
+  m_remapInterval: {x: 0.4, y: 0.67}
