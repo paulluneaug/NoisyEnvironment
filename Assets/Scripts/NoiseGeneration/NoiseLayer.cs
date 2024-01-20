@@ -8,7 +8,7 @@ using static PerlinNoiseGenerator;
 using static VornoiNoiseGenerator;
 
 [CreateAssetMenu(fileName = nameof(NoiseLayer), menuName = "Noise/" + nameof(NoiseLayer))]
-public class NoiseLayer : ScriptableObject
+public class NoiseLayer : NoiseLayerBase
 {
     public enum NoiseType
     {
@@ -24,7 +24,7 @@ public class NoiseLayer : ScriptableObject
     [SerializeField] private bool m_inverse;
 
     [Header("Mask")]
-    [SerializeField] private NoiseLayer m_mask;
+    [SerializeField] private NoiseLayerBase m_mask;
     [SerializeField] private bool m_inverseMask;
     [SerializeField, MinMaxSlider(0, 1)] private Vector2 m_remapInterval;
 
@@ -38,11 +38,12 @@ public class NoiseLayer : ScriptableObject
     [NonSerialized] private int m_savedGradientOffset;
     [NonSerialized] private float m_savedLayerWeight;
     [NonSerialized] private bool m_savedInverse;
-    [NonSerialized] private NoiseLayer m_savedMask;
+    [NonSerialized] private NoiseLayerBase m_savedMask;
     [NonSerialized] private bool m_savedInverseMask;
+    [NonSerialized] private Vector2 m_savedRemapInterval;
 
 
-    public float[,] Generate(Vector2Int zoneToGenerate)
+    public override float[,] GetHeightMap(Vector2Int zoneToGenerate)
     {
         if (NeedsFullRegeneration(zoneToGenerate))
         {
@@ -59,6 +60,11 @@ public class NoiseLayer : ScriptableObject
         return m_generatedValues;
     }
 
+    public override bool Changed(Vector2Int zoneToGenerate)
+    {
+        return NeedsFullRegeneration(zoneToGenerate) || WeightChanged() || InverseChanged();
+    }
+
     private bool NeedsFullRegeneration(Vector2Int zoneToGenerate)
     {
         return 
@@ -68,7 +74,8 @@ public class NoiseLayer : ScriptableObject
             m_savedUseSmootherStep == m_useSmootherStep &&
             m_savedGradientOffset == m_gradientOffset &&
             m_mask == m_savedMask &&
-            m_inverseMask == m_savedMask);
+            m_inverseMask == m_savedInverseMask &&
+            m_savedRemapInterval == m_remapInterval);
     }
 
     private void GenerateZone(Vector2Int zoneToGenerate)
@@ -97,7 +104,7 @@ public class NoiseLayer : ScriptableObject
 
         if (m_mask != null)
         {
-            float[,] maskValues = m_mask.Generate(zoneToGenerate);
+            float[,] maskValues = m_mask.GetHeightMap(zoneToGenerate);
             ApplyMask(maskValues);
         }
 
@@ -109,6 +116,7 @@ public class NoiseLayer : ScriptableObject
         m_savedGradientOffset = m_gradientOffset;
         m_savedLayerWeight = m_layerWeight;
         m_savedInverse = m_inverse;
+        m_savedRemapInterval = m_remapInterval;
 
         m_savedMask = m_mask;
         m_savedInverseMask = m_inverseMask;
@@ -156,5 +164,4 @@ public class NoiseLayer : ScriptableObject
         maskValue = Mathf.Clamp01(Mathf.InverseLerp(m_remapInterval.x, m_remapInterval.y, maskValue));
         return m_inverseMask ? 1 - maskValue : maskValue;
     }
-
 }

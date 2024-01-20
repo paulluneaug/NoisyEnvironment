@@ -32,7 +32,7 @@ public class NoiseTerrainController : MonoBehaviour
 
     [SerializeField] private NoiseType m_noiseType = NoiseType.Perlin;
 
-    [SerializeField] private NoiseLayer m_noiseLayer = null;
+    [SerializeField] private NoiseLayerBase m_noiseLayer = null;
 
     [SerializeField] private Terrain m_terrain;
     [SerializeField] private int m_terrainHeight;
@@ -81,6 +81,6 @@ public class NoiseTerrainController : MonoBehaviour
 
     private float[,] GetHeightMap(Vector2Int zone)
     {
-        return m_noiseLayer.Generate(zone);
+        return m_noiseLayer.GetHeightMap(zone);
     }
 }
