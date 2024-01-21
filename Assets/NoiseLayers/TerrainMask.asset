@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7065e0c539169d40baad3fcafdf438d, type: 3}
   m_Name: TerrainMask
   m_EditorClassIdentifier: 
+  m_forceRecalculate: 1
   m_noiseType: 0
   m_noiseScale: 2500
   m_useSmootherStep: 0
   m_gradientOffset: 121
-  m_layerWeight: 1
   m_inverse: 0
+  m_order: 0
+  m_markSeams: 0
+  m_seamWidth: 0
+  m_sameCellSameValue: 0
   m_mask: {fileID: 0}
   m_inverseMask: 0
   m_remapInterval: {x: 0, y: 0}

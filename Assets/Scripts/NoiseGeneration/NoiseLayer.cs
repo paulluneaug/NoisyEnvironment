@@ -16,11 +16,25 @@ public class NoiseLayer : NoiseLayerBase
         Vornoi,
     }
 
+    private bool IsVornoi => m_noiseType == NoiseType.Vornoi;
+    private bool VornoiAndMarkSeams => IsVornoi && m_markSeams;
+
+    [SerializeField] private bool m_forceRecalculate = false;
+
     [SerializeField] private NoiseType m_noiseType = NoiseType.Perlin;
     [SerializeField] private int m_noiseScale;
     [SerializeField] private bool m_useSmootherStep;
     [SerializeField] private int m_gradientOffset;
     [SerializeField] private bool m_inverse;
+
+    [ShowIf(nameof(IsVornoi))]
+    [SerializeField] private int m_order;
+    [ShowIf(nameof(IsVornoi))]
+    [SerializeField] private bool m_markSeams;
+    [ShowIf(nameof(VornoiAndMarkSeams))]
+    [SerializeField] private float m_seamWidth;
+    [ShowIf(nameof(IsVornoi))]
+    [SerializeField] private bool m_sameCellSameValue;
 
     [Header("Mask")]
     [SerializeField] private NoiseLayerBase m_mask;
@@ -40,6 +54,10 @@ public class NoiseLayer : NoiseLayerBase
     [NonSerialized] private NoiseLayerBase m_savedMask;
     [NonSerialized] private bool m_savedInverseMask;
     [NonSerialized] private Vector2 m_savedRemapInterval;
+    [NonSerialized] private int m_savedOrder;
+    [NonSerialized] private bool m_savedMarkSeam;
+    [NonSerialized] private float m_savedSeamWidth;
+    [NonSerialized] private bool m_savedSameCellSameValue;
 
 
     public override float[,] GetHeightMap(Vector2Int zoneToGenerate)
@@ -62,6 +80,7 @@ public class NoiseLayer : NoiseLayerBase
 
     private bool NeedsFullRegeneration(Vector2Int zoneToGenerate)
     {
+        if (m_forceRecalculate) { return true; }
         return 
             !(m_savedZoneToGenerate == zoneToGenerate &&
             m_savedNoiseType == m_noiseType &&
@@ -70,7 +89,11 @@ public class NoiseLayer : NoiseLayerBase
             m_savedGradientOffset == m_gradientOffset &&
             m_mask == m_savedMask &&
             m_inverseMask == m_savedInverseMask &&
-            m_savedRemapInterval == m_remapInterval);
+            m_savedRemapInterval == m_remapInterval &&
+            m_savedOrder == m_order &&
+            m_savedMarkSeam == m_markSeams &&
+            m_savedSeamWidth == m_seamWidth &&
+            m_savedSameCellSameValue == m_sameCellSameValue);
     }
 
     private void GenerateZone(Vector2Int zoneToGenerate)
@@ -89,7 +112,7 @@ public class NoiseLayer : NoiseLayerBase
                 break;
 
             case NoiseType.Vornoi:
-                VornoiNoiseLayer vornoiLayer = new VornoiNoiseLayer(m_gradientOffset, m_noiseScale, m_useSmootherStep, m_inverse);
+                VornoiNoiseLayer vornoiLayer = new VornoiNoiseLayer(m_order, m_gradientOffset, m_noiseScale, m_useSmootherStep, m_inverse, m_markSeams, m_seamWidth, m_sameCellSameValue);
                 VornoiNoiseGenerationParameters vornoiParameters = new(zoneToGenerate, vornoiLayer);
                 m_generatedValues = VornoiNoiseGenerator.GenerateZone(vornoiParameters);
                 break;
@@ -101,6 +124,7 @@ public class NoiseLayer : NoiseLayerBase
             ApplyMask(maskValues);
         }
 
+        m_forceRecalculate = false;
 
         m_savedZoneToGenerate = zoneToGenerate;
         m_savedNoiseType = m_noiseType;
@@ -110,7 +134,12 @@ public class NoiseLayer : NoiseLayerBase
         m_savedInverse = m_inverse;
         m_savedRemapInterval = m_remapInterval;
 
-        m_savedMask = m_mask;
+        m_savedOrder = m_order;
+        m_savedMarkSeam = m_markSeams;
+        m_savedSeamWidth = m_seamWidth;
+        m_savedSameCellSameValue = m_sameCellSameValue;
+
+        m_savedMask = m_mask;                  
         m_savedInverseMask = m_inverseMask;
     }
 

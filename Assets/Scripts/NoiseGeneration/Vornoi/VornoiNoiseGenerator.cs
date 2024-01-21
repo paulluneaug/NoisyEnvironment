@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,18 +24,27 @@ public static class VornoiNoiseGenerator
 
     public struct VornoiNoiseLayer
     {
+        public int Order;
         public int GradientOffset;
         public int NoiseScale;
 
         public bool UseSmootherStep;
         public bool Inverse;
+        public bool MarkSeams;
+        public float SeamsWidth;
 
-        public VornoiNoiseLayer(int gradientOffset, int scale, bool useSmootherStep, bool inverse)
+        public bool SameCellSameValue;
+
+        public VornoiNoiseLayer(int order, int gradientOffset, int noiseScale, bool useSmootherStep, bool inverse, bool markSeams, float seamsWidth, bool sameCellSameValue)
         {
+            Order = order;
             GradientOffset = gradientOffset;
-            NoiseScale = scale;
+            NoiseScale = noiseScale;
             UseSmootherStep = useSmootherStep;
             Inverse = inverse;
+            MarkSeams = markSeams;
+            SeamsWidth = seamsWidth;
+            SameCellSameValue = sameCellSameValue;
         }
     }
 
@@ -62,20 +72,54 @@ public static class VornoiNoiseGenerator
         int x0 = Mathf.FloorToInt(x);
         int y0 = Mathf.FloorToInt(y);
 
-        float minSqrDist = 2.0f;
+        float layerValue;
+        uint cellSeed;
 
-        for(int jx = -1;  jx <= 1; ++jx) 
+        (float, uint)[] dists = new (float, uint)[9];
+
+        for (int jx = -1;  jx <= 1; ++jx) 
         {
             for (int jy = -1; jy <= 1; ++jy)
             {
-                minSqrDist = Mathf.Min(minSqrDist, SqrMagnitude(GetCellPointCoordinates(x0 + jx, y0 + jy, parameters.Layer.GradientOffset) - position));
+                cellSeed = GetCellSeed2D(x0 + jx, y0 + jy, parameters.Layer.GradientOffset);
+                dists[(jx + 1) * 3 + (jy + 1)] = (SqrMagnitude(GetCellPointCoordinates(x0 + jx, y0 + jy, cellSeed) - position), cellSeed);
             }
         }
 
+        Array.Sort(dists, (a, b) => a.Item1.CompareTo(b.Item1));
 
-        float layerValue = minSqrDist;// Mathf.Sqrt(minSqrDist);
 
+        if (parameters.Layer.SameCellSameValue)
+        {
+            layerValue = RandomFloat(ref dists[parameters.Layer.Order].Item2);
+        }
+        else
+        {
+            layerValue = dists[parameters.Layer.Order].Item1;
+            layerValue /= (parameters.Layer.Order == 0 ? 2 : 4);// Mathf.Sqrt(minSqrDist);
+        }
         layerValue = layerValue / 2 + 0.5f;
+
+        if (parameters.Layer.MarkSeams)
+        {
+            bool isOnSeam = false;
+            if (parameters.Layer.Order > 0)
+            {
+                if (Mathf.Abs(dists[parameters.Layer.Order - 1].Item1 - dists[parameters.Layer.Order].Item1) < parameters.Layer.SeamsWidth)
+                {
+                    isOnSeam = true;
+                }
+            }
+            if (!isOnSeam && parameters.Layer.Order < 8)
+            {
+                if (Mathf.Abs(dists[parameters.Layer.Order + 1].Item1 - dists[parameters.Layer.Order].Item1) < parameters.Layer.SeamsWidth)
+                {
+                    isOnSeam = true;
+                }
+            }
+            layerValue = isOnSeam ? 0.0f : layerValue;
+        }
+
 
         if (parameters.Layer.Inverse)
         {
@@ -90,10 +134,8 @@ public static class VornoiNoiseGenerator
         return v.x * v.x + v.y * v.y;
     }
 
-    private static float2 GetCellPointCoordinates(int cellX, int cellY, int seed)
+    private static float2 GetCellPointCoordinates(int cellX, int cellY, uint cellSeed)
     {
-        uint cellSeed = GetCellSeed2D(cellX, cellY, seed);
-
         return new float2(cellX + RandomFloat(ref cellSeed) / 2 + 0.5f , cellY + RandomFloat(ref cellSeed) / 2 + 0.5f);
     }
 }

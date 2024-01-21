@@ -151,7 +151,7 @@ Transform:
   m_GameObject: {fileID: 468149988}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 500, y: 50, z: 500}
+  m_LocalPosition: {x: 500, y: 78, z: 500}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -276,11 +276,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_renderer: {fileID: 0}
-  m_noiseType: 1
-  m_noiseLayer: {fileID: 11400000, guid: 360f4c8a731e8254bb9b392d5e57f7d9, type: 2}
+  m_terrainNoiseLayer: {fileID: 11400000, guid: 360f4c8a731e8254bb9b392d5e57f7d9,
+    type: 2}
+  m_cityLayer: {fileID: 11400000, guid: cfa1a0ecf0dd296408a801d430097c44, type: 2}
   m_terrain: {fileID: 888076108}
   m_terrainHeight: 0
   m_terrainMaterial: {fileID: 2100000, guid: 885ec2b65c36a29418eb63b27fdbd099, type: 2}
+  m_cityMaxHeight: 3
+  m_cityHeightRange: {x: 0.35, y: 1}
 --- !u!1 &611768502
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_layers:
   - Layer: {fileID: 11400000, guid: e6d4ab54d0825e64bb8ea44a9bbcf7f5, type: 2}
-    Weight: 2
+    Weight: 3
   - Layer: {fileID: 11400000, guid: 93a24605e1caaa4439817ff3c5906ffd, type: 2}
-    Weight: 5
+    Weight: 6
   - Layer: {fileID: 11400000, guid: be3ccb1287200b8499ffb356a910b655, type: 2}
-    Weight: 0.6
+    Weight: 0.5
