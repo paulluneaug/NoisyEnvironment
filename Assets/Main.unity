@@ -151,7 +151,7 @@ Transform:
   m_GameObject: {fileID: 468149988}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 500, y: 78, z: 500}
+  m_LocalPosition: {x: 500, y: 69.6, z: 500}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -278,12 +278,117 @@ MonoBehaviour:
   m_renderer: {fileID: 0}
   m_terrainNoiseLayer: {fileID: 11400000, guid: 360f4c8a731e8254bb9b392d5e57f7d9,
     type: 2}
-  m_cityLayer: {fileID: 11400000, guid: cfa1a0ecf0dd296408a801d430097c44, type: 2}
   m_terrain: {fileID: 888076108}
   m_terrainHeight: 0
-  m_terrainMaterial: {fileID: 2100000, guid: 885ec2b65c36a29418eb63b27fdbd099, type: 2}
-  m_cityMaxHeight: 3
-  m_cityHeightRange: {x: 0.35, y: 1}
+  m_terrainMaterial: {fileID: 2100000, guid: f8b007d3ebb969448b58153e86a214f0, type: 2}
+  m_waterPlane: {fileID: 468149989}
+  m_waterColor: {r: 0, g: 0.28931952, b: 1, a: 1}
+  m_terrainColorAtHeigth:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.9113348, b: 0.33490568, a: 1}
+    key1: {r: 0.21410124, g: 0.8396226, b: 0.0039604935, a: 1}
+    key2: {r: 0.4488697, g: 0.7264151, b: 0.52500105, a: 0}
+    key3: {r: 1, g: 1, b: 1, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 4433
+    ctime2: 9638
+    ctime3: 15998
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 2
+    m_ColorSpace: -1
+    m_NumColorKeys: 4
+    m_NumAlphaKeys: 2
+  m_steepTerrainColorAtHeigth:
+    serializedVersion: 2
+    key0: {r: 0.5377358, g: 0.27484083, b: 0, a: 1}
+    key1: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 11565
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  m_waterLevel: 0.116
+  m_steepTerrainTreshold: 0.789
+  m_terrainTexture: {fileID: 2800000, guid: 466a3114a5b489e4681329ec7abbae9a, type: 2}
+  m_addCity: 1
+  m_cityLayer: {fileID: 11400000, guid: cfa1a0ecf0dd296408a801d430097c44, type: 2}
+  m_cityMask: {fileID: 11400000, guid: 62e96ece3f64138469a0d45424185900, type: 2}
+  m_m_roadMask: {fileID: 11400000, guid: 95f8e8468755def44983ee00a3086991, type: 2}
+  m_cityMaskTreshold: 0.714
+  m_roadMaskTreshold: 0.703
+  m_cityMaxHeight: 0.1
+  m_cityHeightRange: {x: 0.44, y: 1}
+  m_roadColor: {r: 0.11320752, g: 0.111605525, b: 0.111605525, a: 1}
+  m_buildingGradient:
+    serializedVersion: 2
+    key0: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
+    key1: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 578
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  m_addTrees: 1
+  m_treeLayer: {fileID: 11400000, guid: 1d7a9436da875754a8793bb83410916f, type: 2}
+  m_treeProbabilityMultiplier: 1
+  m_treePrfab: {fileID: 0}
 --- !u!1 &611768502
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +571,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 594ea882c5a793440b60ff72d896021e, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: f8b007d3ebb969448b58153e86a214f0, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1

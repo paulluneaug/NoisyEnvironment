@@ -15,5 +15,3 @@ MonoBehaviour:
   m_layers:
   - Layer: {fileID: 11400000, guid: 45d6b2a87baa38b418b242dc86701d84, type: 2}
     Weight: 1
-  - Layer: {fileID: 11400000, guid: cfa1a0ecf0dd296408a801d430097c44, type: 2}
-    Weight: 0.03

@@ -32,9 +32,13 @@ public static class NoiseUtils
 
     public static float RandomFloat(ref uint seed)
     {
+        return RandomFloat01(ref seed) * 2 - 1; // [-1;1]
+    }
+
+    public static float RandomFloat01(ref uint seed)
+    {
         seed = Hash(seed);
-        float random = seed / 4294967295.0f; // 2^32-1 
-        return random * 2 - 1; // [-1;1]
+        return seed / 4294967295.0f; // 2^32-1
     }
 
     public static float Smootherstep(float w)

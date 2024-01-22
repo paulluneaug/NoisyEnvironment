@@ -15,7 +15,7 @@ MonoBehaviour:
   m_forceRecalculate: 0
   m_noiseType: 1
   m_noiseScale: 512
-  m_useSmootherStep: 1
+  m_useSmootherStep: 0
   m_gradientOffset: 0
   m_inverse: 0
   m_order: 0
@@ -25,3 +25,18 @@ MonoBehaviour:
   m_mask: {fileID: 11400000, guid: 8b63dd368aab5d84fba16497dee9e05f, type: 2}
   m_inverseMask: 0
   m_remapInterval: {x: 0.4, y: 0.55}
+  m_savedZoneToGenerate: {x: 2048, y: 2048}
+  m_savedNoiseType: 1
+  m_savedNoiseScale: 512
+  m_savedUseSmootherStep: 0
+  m_savedGradientOffset: 0
+  m_savedLayerWeight: 0
+  m_savedInverse: 0
+  m_savedMask: {fileID: 11400000, guid: 8b63dd368aab5d84fba16497dee9e05f, type: 2}
+  m_savedInverseMask: 0
+  m_savedRemapInterval: {x: 0.4, y: 0.55}
+  m_savedOrder: 0
+  m_savedMarkSeam: 0
+  m_savedSeamWidth: 0.1
+  m_savedSameCellSameValue: 0
+  m_texture: {fileID: 2800000, guid: 8a88da1460f8472499e25817d42a567c, type: 2}

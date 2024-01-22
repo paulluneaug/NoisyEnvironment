@@ -14,14 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_forceRecalculate: 0
   m_noiseType: 1
-  m_noiseScale: 64
+  m_noiseScale: 50
   m_useSmootherStep: 0
   m_gradientOffset: 0
   m_inverse: 0
   m_order: 0
   m_markSeams: 1
-  m_seamWidth: 0.09
+  m_seamWidth: 0.3
   m_sameCellSameValue: 1
   m_mask: {fileID: 0}
   m_inverseMask: 0
   m_remapInterval: {x: 0.72, y: 1}
+  m_savedZoneToGenerate: {x: 2048, y: 2048}
+  m_savedNoiseType: 1
+  m_savedNoiseScale: 50
+  m_savedUseSmootherStep: 0
+  m_savedGradientOffset: 0
+  m_savedLayerWeight: 0
+  m_savedInverse: 0
+  m_savedMask: {fileID: 0}
+  m_savedInverseMask: 0
+  m_savedRemapInterval: {x: 0.72, y: 1}
+  m_savedOrder: 0
+  m_savedMarkSeam: 1
+  m_savedSeamWidth: 0.3
+  m_savedSameCellSameValue: 1
+  m_texture: {fileID: 2800000, guid: 61e3d03ddaed0bd409e66bc6407faf39, type: 2}

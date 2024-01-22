@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7065e0c539169d40baad3fcafdf438d, type: 3}
   m_Name: CityMask0
   m_EditorClassIdentifier: 
-  m_forceRecalculate: 1
+  m_forceRecalculate: 0
   m_noiseType: 0
   m_noiseScale: 3072
   m_useSmootherStep: 0

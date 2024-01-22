@@ -28,6 +28,8 @@ public static class VornoiNoiseGenerator
         public int GradientOffset;
         public int NoiseScale;
 
+        public float Pow;
+
         public bool UseSmootherStep;
         public bool Inverse;
         public bool MarkSeams;
@@ -35,7 +37,7 @@ public static class VornoiNoiseGenerator
 
         public bool SameCellSameValue;
 
-        public VornoiNoiseLayer(int order, int gradientOffset, int noiseScale, bool useSmootherStep, bool inverse, bool markSeams, float seamsWidth, bool sameCellSameValue)
+        public VornoiNoiseLayer(int order, int gradientOffset, int noiseScale, bool useSmootherStep, bool inverse, bool markSeams, float seamsWidth, bool sameCellSameValue, float pow)
         {
             Order = order;
             GradientOffset = gradientOffset;
@@ -45,6 +47,7 @@ public static class VornoiNoiseGenerator
             MarkSeams = markSeams;
             SeamsWidth = seamsWidth;
             SameCellSameValue = sameCellSameValue;
+            Pow = pow;
         }
     }
 
@@ -126,7 +129,7 @@ public static class VornoiNoiseGenerator
             layerValue = 1.0f - layerValue;
         }
 
-        result[ix, iy] = layerValue;
+        result[ix, iy] = Mathf.Pow(layerValue, parameters.Layer.Pow);
     }
 
     private static float SqrMagnitude(float2 v)
@@ -136,6 +139,6 @@ public static class VornoiNoiseGenerator
 
     private static float2 GetCellPointCoordinates(int cellX, int cellY, uint cellSeed)
     {
-        return new float2(cellX + RandomFloat(ref cellSeed) / 2 + 0.5f , cellY + RandomFloat(ref cellSeed) / 2 + 0.5f);
+        return new float2(cellX + RandomFloat01(ref cellSeed), cellY + RandomFloat01(ref cellSeed));
     }
 }

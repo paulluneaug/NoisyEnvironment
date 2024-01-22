@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aeee0ae3082a2545a29dabad962c702, type: 3}
+  m_Name: Mountains
+  m_EditorClassIdentifier: 
+  _: 0
+  m_layers:
+  - Layer: {fileID: 11400000, guid: 93a24605e1caaa4439817ff3c5906ffd, type: 2}
+    Weight: 1
+  m_savedLayers: []
+  m_savedZoneToGenerate: {x: 0, y: 0}
+  m_texture: {fileID: 0}

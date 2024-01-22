@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
+using UnityUtility.CustomAttributes;
 
 [CreateAssetMenu(fileName = nameof(LayerAggregation), menuName = "Noise/" + nameof(LayerAggregation))]
 public class LayerAggregation : NoiseLayerBase
@@ -46,14 +49,19 @@ public class LayerAggregation : NoiseLayerBase
         }
     }
 
+    [Button(nameof(ShowLayerAsTexture))]
+    [SerializeField] private bool _;
+
     [SerializeField] private LayerAndWeigth[] m_layers = null;
     [SerializeField] private float[,] m_savedMap = null;
 
-    [NonSerialized] private LayerAndWeigth[] m_savedLayers = null;
+    [SerializeField, HideInInspector] private LayerAndWeigth[] m_savedLayers = null;
+    [SerializeField, HideInInspector] private Vector2Int m_savedZoneToGenerate;
+    [SerializeField] private Texture2D m_texture;
 
     public override float[,] GetHeightMap(Vector2Int zoneToGenerate)
     {
-        if (Changed(zoneToGenerate))
+        if (m_savedZoneToGenerate != zoneToGenerate || Changed(zoneToGenerate))
         {
             m_savedMap = new float[zoneToGenerate.x, zoneToGenerate.y];
 
@@ -69,6 +77,7 @@ public class LayerAggregation : NoiseLayerBase
 
             m_savedLayers = m_layers.Select(l => l.Clone()).ToArray();
         }
+        m_savedZoneToGenerate = zoneToGenerate;
         return m_savedMap;
     }
 
@@ -90,5 +99,25 @@ public class LayerAggregation : NoiseLayerBase
             }
         }
         return false;
+    }
+
+    private void ShowLayerAsTexture()
+    {
+        bool texNull = false;
+        if (m_texture == null)
+        {
+            texNull = true;
+            m_texture = new Texture2D(m_savedZoneToGenerate.x, m_savedZoneToGenerate.y, GraphicsFormat.R32G32B32A32_SFloat, TextureCreationFlags.None);
+        }
+
+        float[] flatDatas = new float[m_savedZoneToGenerate.x * m_savedZoneToGenerate.y];
+        Buffer.BlockCopy(GetHeightMap(m_savedZoneToGenerate), 0, flatDatas, 0, m_savedZoneToGenerate.x * m_savedZoneToGenerate.y * sizeof(float));
+        m_texture.SetPixels(flatDatas.Select(f => new Color(f, f, f, 1)).ToArray());
+
+        if (texNull)
+        {
+            AssetDatabase.CreateAsset(m_texture, $"Assets/NoiseLayersTextures/Layer_{name}.asset");
+        }
+        AssetDatabase.SaveAssetIfDirty(m_texture);
     }
 }
