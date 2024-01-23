@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7065e0c539169d40baad3fcafdf438d, type: 3}
   m_Name: AdditionalPerlin1
   m_EditorClassIdentifier: 
+  m_a: 0
   m_forceRecalculate: 1
   m_noiseType: 0
   m_noiseScale: 128
   m_useSmootherStep: 0
   m_gradientOffset: 0
   m_inverse: 0
+  m_pow: 1
+  m_mul: 1
+  m_offset: 0
   m_order: 0
   m_markSeams: 0
   m_seamWidth: 0
@@ -25,3 +29,19 @@ MonoBehaviour:
   m_mask: {fileID: 0}
   m_inverseMask: 0
   m_remapInterval: {x: 0.72, y: 1}
+  m_savedZoneToGenerate: {x: 0, y: 0}
+  m_savedNoiseType: 0
+  m_savedNoiseScale: 0
+  m_savedUseSmootherStep: 0
+  m_savedGradientOffset: 0
+  m_savedLayerWeight: 0
+  m_savedInverse: 0
+  m_savedMask: {fileID: 0}
+  m_savedInverseMask: 0
+  m_savedRemapInterval: {x: 0, y: 0}
+  m_savedOrder: 0
+  m_savedMarkSeam: 0
+  m_savedSeamWidth: 0
+  m_savedSameCellSameValue: 0
+  m_savedPow: 0
+  m_texture: {fileID: 0}

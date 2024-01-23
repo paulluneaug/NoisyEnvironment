@@ -29,6 +29,8 @@ public static class VornoiNoiseGenerator
         public int NoiseScale;
 
         public float Pow;
+        public float Mul;
+        public float Offset;
 
         public bool UseSmootherStep;
         public bool Inverse;
@@ -37,7 +39,7 @@ public static class VornoiNoiseGenerator
 
         public bool SameCellSameValue;
 
-        public VornoiNoiseLayer(int order, int gradientOffset, int noiseScale, bool useSmootherStep, bool inverse, bool markSeams, float seamsWidth, bool sameCellSameValue, float pow)
+        public VornoiNoiseLayer(int order, int gradientOffset, int noiseScale, bool useSmootherStep, bool inverse, bool markSeams, float seamsWidth, bool sameCellSameValue, float pow, float mul, float offset)
         {
             Order = order;
             GradientOffset = gradientOffset;
@@ -48,6 +50,8 @@ public static class VornoiNoiseGenerator
             SeamsWidth = seamsWidth;
             SameCellSameValue = sameCellSameValue;
             Pow = pow;
+            Mul = mul;
+            Offset = offset;
         }
     }
 
@@ -94,14 +98,13 @@ public static class VornoiNoiseGenerator
 
         if (parameters.Layer.SameCellSameValue)
         {
-            layerValue = RandomFloat(ref dists[parameters.Layer.Order].Item2);
+            layerValue = RandomFloat01(ref dists[parameters.Layer.Order].Item2);
         }
         else
         {
             layerValue = dists[parameters.Layer.Order].Item1;
             layerValue /= (parameters.Layer.Order == 0 ? 2 : 4);// Mathf.Sqrt(minSqrDist);
         }
-        layerValue = layerValue / 2 + 0.5f;
 
         if (parameters.Layer.MarkSeams)
         {
@@ -129,7 +132,11 @@ public static class VornoiNoiseGenerator
             layerValue = 1.0f - layerValue;
         }
 
-        result[ix, iy] = Mathf.Pow(layerValue, parameters.Layer.Pow);
+        layerValue = Mathf.Pow(layerValue, parameters.Layer.Pow);
+        layerValue *= parameters.Layer.Mul;
+        layerValue += parameters.Layer.Offset;
+
+        result[ix, iy] = layerValue;
     }
 
     private static float SqrMagnitude(float2 v)

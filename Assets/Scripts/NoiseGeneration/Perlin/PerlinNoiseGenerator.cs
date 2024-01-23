@@ -28,17 +28,22 @@ public static class PerlinNoiseGenerator
         public int NoiseScale;
 
         public float Pow;
+        public float Mul;
+        public float Offset;
 
         public bool UseSmootherStep;
         public bool Inverse;
 
-        public PerlinNoiseLayer(int gradientOffset, int scale, bool useSmootherStep, bool inverse, float pow)
+        public PerlinNoiseLayer(int gradientOffset, int scale, bool useSmootherStep, bool inverse, float pow, float mul, float offset)
         {
             GradientOffset = gradientOffset;
             NoiseScale = scale;
             UseSmootherStep = useSmootherStep;
             Inverse = inverse;
             Pow = pow;
+
+            Mul = mul;
+            Offset = offset;
         }
     }
 
@@ -89,7 +94,12 @@ public static class PerlinNoiseGenerator
         {
             layerValue = 1.0f - layerValue;
         }
-        result[ix, iy] = Mathf.Pow(layerValue, parameters.Layer.Pow);
+
+        layerValue = Mathf.Pow(layerValue, parameters.Layer.Pow);
+        layerValue *= parameters.Layer.Mul;
+        layerValue += parameters.Layer.Offset;
+
+        result[ix, iy] = layerValue;
     }
 
     public static float Smoothstep(float w)

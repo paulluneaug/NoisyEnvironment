@@ -16,6 +16,12 @@ MonoBehaviour:
   m_layers:
   - Layer: {fileID: 11400000, guid: 93a24605e1caaa4439817ff3c5906ffd, type: 2}
     Weight: 1
-  m_savedLayers: []
-  m_savedZoneToGenerate: {x: 0, y: 0}
-  m_texture: {fileID: 0}
+  - Layer: {fileID: 11400000, guid: 1def0bc14f1109341949a6ec81a41114, type: 2}
+    Weight: 0.5
+  m_savedLayers:
+  - Layer: {fileID: 11400000, guid: 93a24605e1caaa4439817ff3c5906ffd, type: 2}
+    Weight: 1
+  - Layer: {fileID: 11400000, guid: 1def0bc14f1109341949a6ec81a41114, type: 2}
+    Weight: 0.5
+  m_savedZoneToGenerate: {x: 2048, y: 2048}
+  m_texture: {fileID: 2800000, guid: e1bd11c8c38c45f4da05322393cb2926, type: 2}

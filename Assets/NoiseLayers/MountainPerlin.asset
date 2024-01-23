@@ -12,33 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7065e0c539169d40baad3fcafdf438d, type: 3}
   m_Name: MountainPerlin
   m_EditorClassIdentifier: 
+  m_a: 0
   m_forceRecalculate: 0
   m_noiseType: 0
-  m_noiseScale: 0
+  m_noiseScale: 256
   m_useSmootherStep: 0
   m_gradientOffset: 0
   m_inverse: 0
   m_pow: 1
+  m_mul: 1
+  m_offset: 0
   m_order: 0
   m_markSeams: 0
   m_seamWidth: 0
   m_sameCellSameValue: 0
-  m_mask: {fileID: 0}
+  m_mask: {fileID: 11400000, guid: 8b63dd368aab5d84fba16497dee9e05f, type: 2}
   m_inverseMask: 0
-  m_remapInterval: {x: 0, y: 0}
-  m_savedZoneToGenerate: {x: 0, y: 0}
+  m_remapInterval: {x: 0.4, y: 0.55}
+  m_savedZoneToGenerate: {x: 2048, y: 2048}
   m_savedNoiseType: 0
-  m_savedNoiseScale: 0
+  m_savedNoiseScale: 512
   m_savedUseSmootherStep: 0
   m_savedGradientOffset: 0
   m_savedLayerWeight: 0
   m_savedInverse: 0
-  m_savedMask: {fileID: 0}
+  m_savedMask: {fileID: 11400000, guid: 8b63dd368aab5d84fba16497dee9e05f, type: 2}
   m_savedInverseMask: 0
-  m_savedRemapInterval: {x: 0, y: 0}
+  m_savedRemapInterval: {x: 0.4, y: 0.55}
   m_savedOrder: 0
   m_savedMarkSeam: 0
   m_savedSeamWidth: 0
   m_savedSameCellSameValue: 0
-  m_savedPow: 0
-  m_texture: {fileID: 0}
+  m_savedPow: 1
+  m_texture: {fileID: 2800000, guid: aa6e8a5ca00c34548b0204fa3146b36c, type: 2}

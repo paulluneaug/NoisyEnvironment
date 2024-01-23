@@ -12,10 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aeee0ae3082a2545a29dabad962c702, type: 3}
   m_Name: Terrain
   m_EditorClassIdentifier: 
+  _: 0
   m_layers:
   - Layer: {fileID: 11400000, guid: e6d4ab54d0825e64bb8ea44a9bbcf7f5, type: 2}
     Weight: 3
-  - Layer: {fileID: 11400000, guid: 93a24605e1caaa4439817ff3c5906ffd, type: 2}
+  - Layer: {fileID: 11400000, guid: 9bfce5cd8d9a84d42a330d09f28b5eac, type: 2}
     Weight: 6
   - Layer: {fileID: 11400000, guid: be3ccb1287200b8499ffb356a910b655, type: 2}
     Weight: 0.5
+  m_savedLayers:
+  - Layer: {fileID: 11400000, guid: e6d4ab54d0825e64bb8ea44a9bbcf7f5, type: 2}
+    Weight: 3
+  - Layer: {fileID: 11400000, guid: 9bfce5cd8d9a84d42a330d09f28b5eac, type: 2}
+    Weight: 6
+  - Layer: {fileID: 11400000, guid: be3ccb1287200b8499ffb356a910b655, type: 2}
+    Weight: 0.5
+  m_savedZoneToGenerate: {x: 2048, y: 2048}
+  m_texture: {fileID: 0}
